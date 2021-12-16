@@ -1,25 +1,28 @@
-import React, { useEffect } from "react";
-import { IWebhookFirebase } from "../Collection/Collection";
+import { nanoid } from "nanoid";
+import React, { useEffect, useRef } from "react";
+import { IWebhook, IWebhookFirebase } from "../Collection/Collection";
+import moment from "moment";
 
 export default function JsonArea({
   webhook,
 }: {
-  webhook: IWebhookFirebase | undefined;
+  webhook: IWebhook | undefined;
 }) {
+  const ref = useRef(nanoid());
+  const textAreaElement = document.getElementById(
+    ref.current
+  ) as HTMLTextAreaElement;
+
   useEffect(() => {
     if (webhook) {
-      const textAreaElement: HTMLTextAreaElement = document.getElementById(
-        "json-area"
-      ) as HTMLTextAreaElement;
-      console.log("JsonArea", webhook);
-      const parsed = JSON.stringify(webhook?.value.metadata, undefined, 4);
+      const parsed = JSON.stringify(webhook?.metadata, undefined, 4);
       textAreaElement.value = parsed || "no content";
     }
   }, [webhook]);
   return (
-    <div>
-      <p>{webhook?.value.createdAt}</p>
-      <textarea className="w-full h-full" name="" id="json-area"></textarea>
+    <div className="bg-red-200 h-full">
+      <p>{moment(webhook?.createdAt).format("HH:mm:ss.SS")}</p>
+      <textarea className="w-full h-full" id={ref.current}></textarea>
     </div>
   );
 }

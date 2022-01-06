@@ -10,47 +10,119 @@ export default function JsonArea({
 }) {
   const ref = useRef(nanoid());
 
-  const [text, setText] = useState([] as any);
+  const [webhookArray, setWebhookArray] = useState([] as any);
+  const [collapsed, setCollapsed] = useState([] as any);
+  const [parsed, setParsed] = useState("");
 
   useEffect(() => {
-    const textAreaElement = document.getElementById(
-      ref.current
-    ) as HTMLTextAreaElement;
     if (webhook) {
       const parsed = JSON.stringify(webhook?.metadata, undefined, 4);
-      textAreaElement.value = parsed || "no content";
-
-      var newString = parsed.replace(/\n/g, "__$newline__");
-      const arr = newString.split("__$newline__");
-      setText(arr);
+      const lines = parsed.split("\n");
+      setWebhookArray(lines);
+      setParsed(parsed);
     }
   }, [webhook]);
+
+  function handler(btn: EventTarget & HTMLButtonElement) {
+    let start = btn.id.split("-")[1] as unknown as number;
+    let end = webhookArray.length;
+
+    if (btn.classList.contains("collapsed")) {
+      handlerExpand();
+    } else {
+      handlerCollapse();
+    }
+
+    function handlerCollapse() {
+      const stack: string[] = [];
+      for (let i = start; i < webhookArray.length; i++) {
+        const line = webhookArray[i];
+        if (line.indexOf("{") > -1) {
+          stack.push("{");
+        } else if (line.indexOf("[") > -1) {
+          stack.push("[");
+        } else if (line.indexOf("}") > -1) {
+          stack.pop();
+        } else if (line.indexOf("]") > -1) {
+          stack.pop();
+        }
+        if (stack.length === 0) {
+          end = i;
+          break;
+        }
+      }
+      collapse(++start, end);
+      btn.classList.add("collapsed");
+
+      function collapse(start: number, end: number) {
+        for (let i = start as unknown as number; i < end; i++) {
+          document.getElementById("li-" + i)?.classList.add("hidden");
+        }
+        const newCollapsed = [...collapsed];
+        newCollapsed.push({ start, end });
+        setCollapsed(newCollapsed);
+      }
+    }
+
+    function handlerExpand() {
+      expand(++start);
+      btn.classList.remove("collapsed");
+
+      function expand(start: number) {
+        for (const el of collapsed)
+          if (el.start === start) {
+            const end: number = el.end;
+            for (let i = start; i < end; i++)
+              document.getElementById("li-" + i)?.classList.remove("hidden");
+            break;
+          }
+      }
+    }
+  }
+
   return (
-    <div className="h-full">
+    <div>
       <p>{moment(webhook?.createdAt).format("HH:mm:ss.SS")}</p>
-      <div className="whitespace-pre">         </div>
+      <div className="whitespace-pre"> </div>
       <button
         onClick={() => {
-          navigator.clipboard.writeText(
-            JSON.stringify(webhook?.metadata, undefined, 4)
-          );
+          navigator.clipboard.writeText(parsed);
         }}
       >
         Copiar
       </button>
 
-    <ul>
-      {text.map((line: string, index: number) => {
-        if((line.indexOf('{') > -1 || line.indexOf('[') > -1) && index > 0 ) {
-          return <li className="whitespace-pre flex" key={index}><button className="bg-red-500 w-6"></button>{line}</li>
-        }
-        return <li className="whitespace-pre" key={index}><button className="bg-red-500 w-6"></button>{line}</li>
-      })}
-    </ul>
-      {text.map((line: string, index: number) => (
-        <p key={index} className="whitespace-pre">{line}</p>
-      ))}
-      <textarea className="w-full h-full" id={ref.current}></textarea>
+      <ul>
+        {webhookArray.map((line: string, index: number) => {
+          if ((line.indexOf("{") > -1 || line.indexOf("[") > -1) && index > 0) {
+            return (
+              <li
+                id={`li-${index}`}
+                className="whitespace-pre flex"
+                key={`li-${index}`}
+              >
+                <button
+                  id={`btn-${index}`}
+                  key={`btn-${index}`}
+                  className="bg-red-500 w-6"
+                  onClick={(e) => handler(e.currentTarget)}
+                ></button>
+                {line}
+              </li>
+            );
+          }
+          return (
+            <li
+              id={`li-${index}`}
+              className="whitespace-pre"
+              key={`li-${index}`}
+            >
+              <button key={`btn-${index}`} className="bg-red-500 w-6"></button>
+              {line}
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 }

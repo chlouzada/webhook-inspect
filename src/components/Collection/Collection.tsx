@@ -53,12 +53,21 @@ export default function Collection() {
             webhooks: {},
             redirectUrl: "http://3c2a-187-109-255-78.ngrok.io",
             userId: user?.id,
-            createdAt: new Date().getTime(),
+            createdAt: moment().format(),
           });
         }
       });
     }
   }, [user]);
+
+  const handlerChangeWebhook = (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+    webhook: IWebhook
+  ) => {
+    e.preventDefault;
+    console.log(webhook);
+    setWebhookRender(webhook);
+  };
 
   return (
     <div>
@@ -69,56 +78,28 @@ export default function Collection() {
               <li
                 key={index}
                 className="mb-2 p-4 text-gray-100 flex flex-row border-gray-300 hover:text-black hover:bg-gray-300 hover:font-bold rounded-lg"
+                onClick={(e) => {
+                  handlerChangeWebhook(e, webhook.value);
+                }}
               >
-                <a href="#">
+                <button>
                   <p className="text-sm">{webhook.key}</p>
                   <span>
                     {moment(webhook.value.createdAt).format("HH:mm:ss")}
                   </span>
-                </a>
+                </button>
               </li>
             ))}
           </ul>
         </nav>
-        <section className="w-full bg-gray-400">
+        <section className="">
           <div className="">
             <h1>Collection Name: {collection}</h1>
             <p>Redirect:</p>
           </div>
           <JsonArea webhook={webhookRender} />
-          <div className="flex flex-col bg-gray-200">
-            {/* <p className="w-full">{webhookRender?.key}</p> */}
-            <div className="flex h-96">
-              <div className="w-1/2 p-2">
-                {/* <JsonArea webhook={webhookRender} /> */}
-              </div>
-              <div className="w-1/2 p-2">
-                {/* <JsonArea webhook={webhookResponseRender} /> */}
-              </div>
-            </div>
-          </div>
         </section>
-        {/* <div className="flex flex-wrap flex-grow">
-            <div>
-              {webhooks.map((webhook) => (
-                <div>
-                  <h2>{webhook.key}</h2>
-                  <p>{moment(webhook.value.createdAt).format("HH:mm:ss")}</p>
-                </div>
-              ))}
-            </div>
-            <div className="flex flex-wrap bg-gray-200">
-              <h3 className="w-full">{webhookRender?.key}</h3>
-              <div className="w-1/2 p-2">
-                <JsonArea webhook={webhookRender} />
-              </div>
-              <div className="w-1/2 p-2">
-                <JsonArea webhook={webhookResponseRender} />
-              </div>
-            </div>
-          </div> */}
       </div>
-      <div className="flex flex-col"></div>
     </div>
   );
 }

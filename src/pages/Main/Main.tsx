@@ -4,6 +4,7 @@ import { useAuth } from "../../hooks/useAuth";
 
 import { getAuth, signInAnonymously } from "firebase/auth";
 import { nanoid } from "nanoid";
+import Header from "../../components/Header/Header";
 
 export default function Main() {
   const { user } = useAuth();
@@ -18,7 +19,8 @@ export default function Main() {
   });
 
   return (
-    <div className="h-screen">
+    <div>
+      <Header />
       <Collection />
     </div>
   );

@@ -39,7 +39,6 @@ export default function Collection() {
         if (collection) {
           const webhooks = Object.entries(collection.webhooks).map(
             ([key, content]) => {
-              console.log(content);
               const value = content as IWebhook;
               const object: IWebhookFirebase = { key, value: value };
               return object;
@@ -65,33 +64,13 @@ export default function Collection() {
     webhook: IWebhook
   ) => {
     e.preventDefault;
-    console.log(webhook);
     setWebhookRender(webhook);
   };
 
   return (
     <div>
-      <div className="flex">
-        <nav className="flex flex-col bg-purple-900 w-64 h-screen px-4 tex-gray-900 border border-purple-900">
-          <ul className="p-2">
-            {webhooks.map((webhook, index) => (
-              <li
-                key={index}
-                className="mb-2 p-4 text-gray-100 flex flex-row border-gray-300 hover:text-black hover:bg-gray-300 hover:font-bold rounded-lg"
-                onClick={(e) => {
-                  handlerChangeWebhook(e, webhook.value);
-                }}
-              >
-                <button>
-                  <p className="text-sm">{webhook.key}</p>
-                  <span>
-                    {moment(webhook.value.createdAt).format("HH:mm:ss")}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
+      <div className="flex container mx-auto">
+        {newFunction(webhooks, handlerChangeWebhook)}
         <section className="">
           <div className="">
             <h1>Collection Name: {collection}</h1>
@@ -101,5 +80,34 @@ export default function Collection() {
         </section>
       </div>
     </div>
+  );
+}
+
+function newFunction(
+  webhooks: IWebhookFirebase[],
+  handlerChangeWebhook: (
+    e: React.MouseEvent<HTMLLIElement, MouseEvent>,
+    webhook: IWebhook
+  ) => void
+) {
+  return (
+    <nav className=" w-64 px-4 tex-gray-900">
+      <ul className="p-2">
+        {webhooks.map((webhook, index) => (
+          <li
+            key={index}
+            className="mb-2 p-4 flex flex-row border-gray-300 hover:text-black hover:bg-gray-300 hover:font-bold rounded-lg"
+            onClick={(e) => {
+              handlerChangeWebhook(e, webhook.value);
+            }}
+          >
+            <button>
+              <p className="text-sm">{webhook.key}</p>
+              <span>{moment(webhook.value.createdAt).format("HH:mm:ss")}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </nav>
   );
 }

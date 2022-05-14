@@ -8,12 +8,11 @@ export default function Webhook() {
   const { render: { webhook, response } } = useWebhook();
 
   useEffect(() => {
-    if (!response) return;
-    if (!response.metadata) setActiveTab(0);
+    if (!response?.metadata) setActiveTab(0);
   }, [response]);
 
   return (
-    <Tabs active={activeTab} onTabChange={setActiveTab}>
+    <Tabs active={activeTab} onTabChange={setActiveTab} className="overflow-auto">
       <Tabs.Tab label="Webhook"><JsonArea webhook={webhook} /></Tabs.Tab>
       <Tabs.Tab label="Response" disabled={response?.metadata ? false : true}><JsonArea webhook={response} /></Tabs.Tab>
     </Tabs>

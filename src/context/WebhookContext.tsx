@@ -19,7 +19,12 @@ export interface IWebhook {
 }
 
 type WebhookContextType = {
+  collection: string;
   webhooks: IWebhookFirebase[] | undefined;
+  render: {
+    webhook: IWebhook | undefined;
+    response: IWebhook | undefined;
+  }
 };
 
 export function WebhookContextProvider({
@@ -27,17 +32,17 @@ export function WebhookContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [webhooks, _setWebhooks] = useState<IWebhookFirebase[]>();
+  const [collection, setCollection] = useState<string>('')
+  const [webhooks, setWebhooks] = useState<IWebhookFirebase[]>();
+  const [webhookToRender, setWebhookToRender] = useState<IWebhook>()
+  const [webhookResponseToRender, setWebhookResponseToRender] = useState<IWebhook>()
+
+
   const { user } = useAuth();
-
-  const setWebhooks = (webhooks: IWebhookFirebase[]) => {
-    console.log('contexto', webhooks);
-    _setWebhooks(webhooks)
-  };
-
 
   useEffect(() => {
     const collectionId = window.location.pathname.split("/")[1] || nanoid();
+    setCollection(collectionId);
 
     window.history.pushState({}, "", collectionId);
 
@@ -55,8 +60,8 @@ export function WebhookContextProvider({
             }
           );
           setWebhooks(webhooks);
-          // setWebhookRender(webhooks.at(-1)?.value);
-          // setWebhookResponseRender(webhooks.at(-1)?.value.response);
+          setWebhookToRender(webhooks.at(-1)?.value);
+          setWebhookResponseToRender(webhooks.at(-1)?.value.response);
         } else {
           set(collectionRef, {
             webhooks: {},
@@ -70,7 +75,14 @@ export function WebhookContextProvider({
   }, [user]);
 
   return (
-    <WebhookContext.Provider value={{ webhooks }}>
+    <WebhookContext.Provider value={{
+      collection,
+      webhooks,
+      render: {
+        webhook: webhookToRender,
+        response: webhookResponseToRender
+      }
+    }}>
       {children}
     </WebhookContext.Provider>
   );

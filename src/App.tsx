@@ -24,8 +24,8 @@ export default function App() {
       navbarOffsetBreakpoint="sm"
       asideOffsetBreakpoint="sm"
       fixed
-      navbar={<Nagivation opened={opened} />}
-      header={<Header />}
+      navbar={<Nagivation opened={opened} setOpened={setOpened} />}
+      header={<Header opened={opened} setOpened={setOpened} />}
     >
       <Main />
     </AppShell>

@@ -24,6 +24,7 @@ type WebhookContextType = {
   render: {
     webhook: IWebhook | undefined;
     response: IWebhook | undefined;
+    change: (key: string) => void;
   }
 };
 
@@ -74,13 +75,22 @@ export function WebhookContextProvider({
     }
   }, [user]);
 
+  const changeWebhookToRender = (key: string) => {
+    // find webhook
+    const webhook = webhooks?.find((webhook) => webhook.key === key);
+    if (!webhook) throw new Error('webhook not found')
+    setWebhookToRender(webhook.value)
+    setWebhookResponseToRender(webhook.value.response)
+  }
+
   return (
     <WebhookContext.Provider value={{
       collection,
       webhooks,
       render: {
         webhook: webhookToRender,
-        response: webhookResponseToRender
+        response: webhookResponseToRender,
+        change: changeWebhookToRender,
       }
     }}>
       {children}

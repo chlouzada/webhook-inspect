@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import React, { useEffect, useRef, useState } from "react";
-import { IWebhook, IWebhookFirebase } from "../Collection/Collection";
 import moment from "moment";
+import { IWebhook } from "../../context/WebhookContext";
 
 export default function JsonArea({
   webhook,
@@ -16,10 +16,10 @@ export default function JsonArea({
 
   useEffect(() => {
     if (webhook) {
-      const parsed = JSON.stringify(webhook?.metadata, undefined, 4);
-      const lines = parsed.split("\n");
+      const stringifyData = JSON.stringify(webhook?.metadata, undefined, 4);
+      const lines = stringifyData?.split("\n");
       setWebhookArray(lines);
-      setParsed(parsed);
+      setParsed(stringifyData || '');
     }
   }, [webhook]);
 
@@ -93,7 +93,7 @@ export default function JsonArea({
       </button>
 
       <ul>
-        {webhookArray.map((line: string, index: number) => {
+        {webhookArray?.map((line: string, index: number) => {
           if ((line.indexOf("{") > -1 || line.indexOf("[") > -1) && index > 0) {
             return (
               <li

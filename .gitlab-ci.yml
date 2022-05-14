@@ -1,0 +1,28 @@
+image: node:16.5.0
+pages:
+  stage: deploy
+  cache:
+    key:
+      files:
+        - yarn.lock
+    paths:
+      - node_modules/
+  variables:
+    VITE_FIREBASE_API_KEY: AIzaSyCvZrUnM3aUFay0Iw3NZhcqoK-dWxcPygk
+    VITE_FIREBASE_AUTH_DOMAIN: webhogger.firebaseapp.com
+    VITE_FIREBASE_DATABASE_URL: https://webhogger-default-rtdb.firebaseio.com
+    VITE_FIREBASE_PROJECT_ID: webhogger
+    VITE_FIREBASE_STORAGE_BUCKET: webhogger.appspot.com
+    VITE_FIREBASE_MESSAGING_SENDER_ID: 298324427768
+    VITE_FIREBASE_APP_ID: 1:298324427768:web:7e8396d69728f1c76f0c0d
+    VITE_FIREBASE_MEASUREMENT_ID: G-HVVLN3HWSW
+    VITE_HEROKU_URL: https://webhook-backend.herokuapp.com/webhook
+  script:
+    - npm install
+    - npm run build
+    - cp -a dist/. public/
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH

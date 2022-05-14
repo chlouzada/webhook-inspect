@@ -10,8 +10,8 @@ export default function JsonArea({
 }) {
   const ref = useRef(nanoid());
 
-  const [webhookArray, setWebhookArray] = useState([] as any);
-  const [collapsed, setCollapsed] = useState([] as any);
+  const [webhookArray, setWebhookArray] = useState<string[]>([]);
+  const [collapsed, setCollapsed] = useState<{ start: number, end: number }[]>([]);
   const [parsed, setParsed] = useState("");
 
   useEffect(() => {
@@ -60,6 +60,7 @@ export default function JsonArea({
         }
         const newCollapsed = [...collapsed];
         newCollapsed.push({ start, end });
+        console.log(newCollapsed)
         setCollapsed(newCollapsed);
       }
     }

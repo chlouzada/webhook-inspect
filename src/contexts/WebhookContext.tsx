@@ -2,6 +2,7 @@ import { onValue, ref, set } from "@firebase/database";
 import moment from "moment";
 import { nanoid } from "nanoid";
 import React, { ReactNode, useEffect, useState } from "react";
+import { useLocation } from "react-router";
 import { useAuth } from "../hooks/useAuth";
 import { database } from "../services/firebase";
 
@@ -43,42 +44,38 @@ export function WebhookContextProvider({
     createdAt: string;
     metadata: any;
   }>()
-
-
   const { user } = useAuth();
 
   useEffect(() => {
-    const collectionId = window.location.pathname.split("/")[1] || nanoid();
-    setCollection(collectionId);
+    const pathname = window.location.pathname.split("/")
+    const collectionName = pathname[pathname.length - 1] || nanoid()
+    setCollection(collectionName);
 
-    window.history.pushState({}, "", collectionId);
+    if (!user) return;
 
-    if (user) {
-      const collectionRef = ref(database, `collections/${collectionId}`);
-
-      onValue(collectionRef, (snapshot) => {
-        const collection = snapshot.val();
-        if (collection) {
-          const webhooks = Object.entries(collection.webhooks).map(
-            ([key, content]) => {
-              const value = content as IWebhook;
-              const object: IWebhookFirebase = { key, value: value };
-              return object;
-            }
-          );
-          setWebhooks(webhooks);
-          setWebhookToRender(webhooks.at(-1)?.value);
-          setWebhookResponseToRender(webhooks.at(-1)?.value.response);
-        } else {
-          set(collectionRef, {
-            webhooks: {},
-            redirectUrl: "http://3c2a-187-109-255-78.ngrok.io",
-            userId: user?.id,
-            createdAt: moment().format(),
-          });
-        }
-      });
-    }
+    const collectionRef = ref(database, `collections/${collectionName}`);
+    onValue(collectionRef, (snapshot) => {
+      const collection = snapshot.val();
+      if (collection) {
+        const webhooks = Object.entries(collection.webhooks).map(
+          ([key, content]) => {
+            const value = content as IWebhook;
+            const object: IWebhookFirebase = { key, value: value };
+            return object;
+          }
+        );
+        setWebhooks(webhooks);
+        setWebhookToRender(webhooks.at(-1)?.value);
+        setWebhookResponseToRender(webhooks.at(-1)?.value.response);
+      } else {
+        set(collectionRef, {
+          webhooks: {},
+          redirectUrl: "http://3c2a-187-109-255-78.ngrok.io",
+          userId: user?.id,
+          createdAt: moment().format(),
+        });
+      }
+    });
   }, [user]);
 
   const changeWebhookToRender = (key: string) => {

@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import React, { useEffect, useRef, useState } from "react";
 import moment from "moment";
-import { IWebhook } from "../../context/WebhookContext";
+import { IWebhook } from "../../contexts/WebhookContext";
 
 export default function JsonArea({
   webhook,

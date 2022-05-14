@@ -4,8 +4,7 @@ import App from "./App";
 import { ModalsProvider } from "@mantine/modals";
 import { MantineProvider } from "@mantine/core";
 import { NotificationsProvider } from "@mantine/notifications";
-import { AuthContextProvider } from "./context/AuthContext";
-import { WebhookContextProvider } from "./context/WebhookContext";
+import { WebhookContextProvider, AuthContextProvider } from "./contexts";
 
 import "./main.css";
 

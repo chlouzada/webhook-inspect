@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { WebhookContext } from "../context/WebhookContext";
+import { WebhookContext } from "../contexts/WebhookContext";
 
 export function useWebhook() {
   return useContext(WebhookContext);

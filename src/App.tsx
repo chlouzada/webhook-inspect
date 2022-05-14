@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { Routes, Route, HashRouter as Router } from "react-router-dom";
 import Header from "./components/Header";
 import Nagivation from "./components/Navigation";
-import { AuthContextProvider } from "./context/AuthContext";
 
 import Main from "./pages/Main/Main";
 

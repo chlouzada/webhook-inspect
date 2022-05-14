@@ -20,11 +20,11 @@ export default function Nagivation({ opened, setOpened }: { opened: boolean, set
           {webhooks?.map((webhook, index) => (
             <li
               key={index}
-              className="mb-2 p-4 flex flex-row border-gray-300 hover:text-black hover:bg-gray-300 hover:font-bold rounded-lg"
+              className="mb-2 p-4 flex flex-col border-gray-300 hover:text-black hover:bg-gray-300 hover:font-bold rounded-lg"
               onClick={() => { opened && setOpened(false); change(webhook.key) }}
             >
               <p className="text-sm">{webhook.key}</p>
-              <span>{moment(webhook.value.createdAt).format("HH:mm:ss")}</span>
+              <p className="text-sm">{moment(webhook.value.createdAt).format("HH:mm:ss")}</p>
             </li>
           ))}
         </ul>

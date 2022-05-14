@@ -7,6 +7,10 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@mantine/core": "^4.2.4",
+    "@mantine/hooks": "^4.2.4",
+    "@mantine/modals": "^4.2.4",
+    "@mantine/notifications": "^4.2.4",
     "firebase": "^9.5.0",
     "moment": "^2.29.1",
     "nanoid": "^3.1.30",

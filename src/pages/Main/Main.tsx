@@ -20,7 +20,6 @@ export default function Main() {
 
   return (
     <div>
-      <Header />
       <Collection />
     </div>
   );

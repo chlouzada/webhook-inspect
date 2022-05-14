@@ -15,7 +15,10 @@ interface IWebhookFirebase {
 export interface IWebhook {
   createdAt: string;
   metadata: any;
-  response?: IWebhook;
+  response?: {
+    createdAt: string;
+    metadata: any;
+  };
 }
 
 type WebhookContextType = {
@@ -36,7 +39,10 @@ export function WebhookContextProvider({
   const [collection, setCollection] = useState<string>('')
   const [webhooks, setWebhooks] = useState<IWebhookFirebase[]>();
   const [webhookToRender, setWebhookToRender] = useState<IWebhook>()
-  const [webhookResponseToRender, setWebhookResponseToRender] = useState<IWebhook>()
+  const [webhookResponseToRender, setWebhookResponseToRender] = useState<{
+    createdAt: string;
+    metadata: any;
+  }>()
 
 
   const { user } = useAuth();

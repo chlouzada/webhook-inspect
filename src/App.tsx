@@ -2,8 +2,8 @@ import { AppShell, Navbar, Text } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
 import React, { useState } from "react";
 import { Routes, Route, HashRouter as Router } from "react-router-dom";
-import Header from "./components/Header/Header";
-import Nagivation from "./components/Navigation/Nagivation";
+import Header from "./components/Header";
+import Nagivation from "./components/Navigation";
 import { AuthContextProvider } from "./context/AuthContext";
 
 import Main from "./pages/Main/Main";

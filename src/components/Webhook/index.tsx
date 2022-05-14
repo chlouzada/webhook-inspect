@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import JsonArea from "../JsonArea/JsonArea";
+import JsonArea from "../JsonArea";
 import { useWebhook } from "../../hooks/useWebhook";
 import { Tabs, Text } from "@mantine/core";
 

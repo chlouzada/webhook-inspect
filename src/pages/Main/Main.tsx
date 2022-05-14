@@ -1,4 +1,4 @@
-import Collection from "../../components/Webhook/Webhook";
+import Collection from "../../components/Webhook";
 import React, { useEffect } from "react";
 import { useAuth } from "../../hooks/useAuth";
 

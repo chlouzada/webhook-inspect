@@ -1,17 +1,14 @@
 import {
   Divider,
   Navbar,
-  Text,
   ScrollArea,
   Select,
-  Container,
   ActionIcon,
-  Button,
 } from "@mantine/core";
 import moment from "moment";
 import React from "react";
-import { useCollections } from "../../contexts/CollectionsContext";
-import { IWebhook, useWebhooks } from "../../contexts/WebhooksContext";
+import { useCollections } from "@/contexts/CollectionsContext";
+import { IWebhook, useWebhooks } from "@/contexts/WebhooksContext";
 
 export default function Nagivation({
   opened,

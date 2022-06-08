@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import JsonArea from "../JsonArea";
+import JsonArea from "@/components/JsonArea";
 import { Tabs, Text } from "@mantine/core";
-import { useWebhooks } from "../../contexts/WebhooksContext";
+import { useWebhooks } from "@/contexts/WebhooksContext";
 
 export default function Webhook() {
   const [activeTab, setActiveTab] = useState(0);

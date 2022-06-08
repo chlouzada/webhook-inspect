@@ -4,7 +4,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { IWebhook } from "./WebhooksContext";
 import { useContext } from "react";
-import { createCollection, getCollections } from "../queries/collection";
+import { createCollection, getCollections } from "@/queries/collection";
 
 export function useCollections() {
   return useContext(CollectionsContext);

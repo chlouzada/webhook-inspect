@@ -1,3 +1,4 @@
+import { trpc } from "@/utils/trpc";
 import { AppShell } from "@mantine/core";
 import type { NextPage } from "next";
 import { useState } from "react";
@@ -7,6 +8,8 @@ import Webhook from "../components/Webhook";
 
 const Home: NextPage = () => {
   const [opened, setOpened] = useState(false);
+  const hello = trpc.useQuery(['hello', {text: 'carlos'}]);
+  if(hello.data) console.log(hello.data);
   return (
     <AppShell
       navbarOffsetBreakpoint="sm"

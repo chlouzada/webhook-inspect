@@ -5,6 +5,8 @@ import { useMutation, useQuery } from "react-query";
 import { IWebhook } from "./WebhooksContext";
 import { useContext } from "react";
 import { createCollection, getCollections } from "@/queries/collection";
+import { trpc } from "@/utils/trpc";
+import { useUser } from "./UserContext";
 
 export function useCollections() {
   return useContext(CollectionsContext);
@@ -41,21 +43,17 @@ export function CollectionsContextProvider({
 }: {
   children: ReactNode;
 }) {
+  const { user } = useUser()
   const [collections, setCollections] = useState<ICollection[]>();
   const [collection, setCollection] = useState<ICollection>();
-  // const [webhooks, setWebhooks] = useState<any[]>();
-  // const [webhookToRender, setWebhookToRender] = useState<any>();
-  // const [webhookResponseToRender, setWebhookResponseToRender] = useState<any>();
 
-  const createCollectionMutation = useMutation(createCollection);
-
-  const collectionsQuery = useQuery("collections", getCollections);
+  // const createCollectionMutation = useMutation(createCollection);
+  const collectionsQuery = trpc.useQuery(['collections', { userId: '62a50b46d4ed2c93380044b2' }]);
+  const newCollectionMutation = trpc.useMutation(['new-collection']);
 
   useEffect(() => {
-    if (collectionsQuery.data?.length === 0)
-      createCollectionMutation.mutate({});
-    setCollections(collectionsQuery.data);
-    setCollection(collectionsQuery.data?.[0]);
+    if (!collectionsQuery.data)
+      newCollectionMutation.mutate({ name: 'New Collection', userId: '62a50b46d4ed2c93380044b2' })
   }, [collectionsQuery.data]);
 
   const changeCollection = (collectionId: string) => {

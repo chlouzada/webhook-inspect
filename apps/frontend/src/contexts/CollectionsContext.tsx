@@ -7,7 +7,7 @@ import {
 import { IWebhook } from "./WebhooksContext";
 import { ICollection } from "shared";
 import { useModals } from "@mantine/modals";
-import { Text } from "@mantine/core";
+import { Button, Text, TextInput } from "@mantine/core";
 
 export const CollectionsContext = React.createContext(
   {} as CollectionsContextType
@@ -35,9 +35,6 @@ export function CollectionsContextProvider({
   const modals = useModals();
   const [collections, setCollections] = useState<ICollection[]>();
   const [collection, setCollection] = useState<ICollection>();
-  // const [webhooks, setWebhooks] = useState<any[]>();
-  // const [webhookToRender, setWebhookToRender] = useState<any>();
-  // const [webhookResponseToRender, setWebhookResponseToRender] = useState<any>();
 
   const createCollectionMutation = useMutation(createCollection);
 
@@ -55,19 +52,36 @@ export function CollectionsContextProvider({
   };
 
   const create = ({ name }: { name: string }) => {
-    modals.openConfirmModal({
-      title: 'Delete your profile',
+    const id = modals.openConfirmModal({
+      title: "New collection",
       centered: true,
       children: (
-        <Text size="sm">
-          Are you sure you want to delete your profile? This action is destructive and you will have
-          to contact support to restore your data.
-        </Text>
+        <>
+          <TextInput
+            onChange={(event) => {
+              localStorage.setItem(
+                import.meta.env.VITE_LS_PREFIX + "collectionName",
+                event.currentTarget.value
+              );
+            }}
+            placeholder="Collection Name"
+            data-autofocus
+          />
+        </>
       ),
-      labels: { confirm: 'Delete account', cancel: "No don't delete it" },
-      confirmProps: { color: 'red' },
-      onCancel: () => console.log('Cancel'),
-      onConfirm: () => console.log('Confirmed'),
+      labels: { confirm: "Create", cancel: "Cancel" },
+      groupProps: { className: "flex flex-nowrap" },
+      confirmProps: { className: "w-full  " },
+      cancelProps: { className: "w-full" },
+      onConfirm: () => () => {
+        modals.closeModal(id);
+        createCollectionMutation.mutate({
+          name:
+            localStorage.getItem(
+              import.meta.env.VITE_LS_PREFIX + "collectionName"
+            ) || undefined,
+        });
+      },
     });
   };
 

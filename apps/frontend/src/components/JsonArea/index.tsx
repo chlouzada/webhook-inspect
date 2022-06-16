@@ -54,7 +54,6 @@ export default function JsonArea({ json }: { json?: object }) {
         }
         const newCollapsed = [...collapsed];
         newCollapsed.push({ start, end });
-        console.log(newCollapsed);
         setCollapsed(newCollapsed);
       }
     }

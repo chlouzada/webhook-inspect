@@ -5,4 +5,6 @@ export interface ICollection {
   redirectTo?: string;
   userRef: string;
   webhooksRef: string;
+  createdAt: string;
+  updatedAt: string;
 }

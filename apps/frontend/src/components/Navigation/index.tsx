@@ -22,8 +22,15 @@ export default function Nagivation({
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // const { webhooks, collection, render: { change } } = useWebhook();
-  const { collections, collection, changeCollection } = useCollections();
+  const { collections, collection, changeCollection, create } = useCollections();
   const { webhooks, changeRenderWebhook } = useWebhooks();
+
+  const handleCopy = () => {
+    if (!collection) return;
+    navigator.clipboard.writeText(
+      `${import.meta.env.VITE_BACKEND_URL}/webhooks/${collection?.name}`
+    );
+  };
 
   return (
     <Navbar
@@ -32,8 +39,9 @@ export default function Nagivation({
       hidden={!opened}
       width={{ sm: 200, lg: 300 }}
     >
-      <Navbar.Section className="w-full">
+      <Navbar.Section className="w-full flex gap-2">
         <Select
+          className="w-full"
           placeholder={collection?.name}
           onChange={(collectionId) => {
             if (!collectionId) return;
@@ -46,8 +54,10 @@ export default function Nagivation({
             })) || []
           }
         />
+        <Button onClick={handleCopy}>Copy</Button>
       </Navbar.Section>
-      <Navbar.Section>
+      <Navbar.Section className="pt-2">
+        <Button className="w-full" onClick={create}>New</Button>
         <Divider my="sm" />
       </Navbar.Section>
       <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">

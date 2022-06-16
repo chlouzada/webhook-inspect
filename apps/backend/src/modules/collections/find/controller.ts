@@ -8,15 +8,15 @@ export default class FindCollectionsController {
   async handle(request: Request, response: Response, next: NextFunction) {
     try {
       const filters = request.query;
-      const skip = request.query.$skip as string;
-      const limit = request.query.$limit as string;
+      const skip = request.query.$skip as number | undefined;
+      const limit = request.query.$limit as number | undefined;
       const { jwt } = response.locals as { jwt: IJwtPayload };
       const service = container.resolve(FindCollectionsService);
       const result = await service.execute({
         userId: jwt.user.id,
         filters,
-        skip: parseInt(skip),
-        limit: parseInt(limit),
+        skip,
+        limit,
       });
       return response.status(200).json(result);
     } catch (error) {

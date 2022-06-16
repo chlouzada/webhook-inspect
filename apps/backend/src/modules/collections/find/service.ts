@@ -12,10 +12,9 @@ export default class FindCollectionsService {
   }: {
     userId: string;
     filters: any;
-    skip: number;
-    limit: number;
+    skip?: number;
+    limit?: number;
   }) {
-    console.log(filters);
     return await this.collectionsRepository.find({
       filters: {
         ...filters,

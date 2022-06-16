@@ -17,12 +17,13 @@ export default class CollectionsRepository {
     limit,
   }: {
     filters: any;
-    skip: number;
-    limit: number;
+    skip?: number;
+    limit?: number;
   }) {
     return await CollectionsModel.find(filters)
-      .skip(skip)
-      .limit(limit)
+      .sort({ createdAt: -1 })
+      .skip(skip || 0)
+      .limit(limit || 20)
       .populate("webhooksRef");
   }
 

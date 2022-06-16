@@ -1,13 +1,12 @@
 {
-  "name": "front",
+  "name": "frontend",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --clearScreen false",
     "build": "tsc && vite build",
     "serve": "vite preview"
   },
   "dependencies": {
-    "shared": "*",
     "@mantine/core": "^4.2.4",
     "@mantine/hooks": "^4.2.4",
     "@mantine/modals": "^4.2.4",
@@ -18,7 +17,8 @@
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-query": "^3.39.0",
-    "react-router-dom": "^6.0.2"
+    "react-router-dom": "^6.0.2",
+    "shared": "*"
   },
   "devDependencies": {
     "@types/react": "^17.0.0",
@@ -28,6 +28,7 @@
     "postcss": "^8.3.11",
     "tailwindcss": "^2.2.19",
     "typescript": "^4.3.2",
-    "vite": "^2.6.4"
+    "vite": "^2.6.4",
+    "tsconfig": "*"
   }
 }

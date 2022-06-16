@@ -17,7 +17,7 @@ type CollectionsContextType = {
   collections: ICollection[] | undefined;
   collection: ICollection | undefined;
   changeCollection: (collectionId: string) => void;
-  create: ({ name: string }) => void;
+  create: () => void;
   // collection: string;
   // webhooks: any[] | undefined;
   // render: {
@@ -51,7 +51,7 @@ export function CollectionsContextProvider({
     setCollection(collections?.find((c) => c._id === collectionId));
   };
 
-  const create = ({ name }: { name: string }) => {
+  const create = () => {
     const id = modals.openConfirmModal({
       title: "New collection",
       centered: true,

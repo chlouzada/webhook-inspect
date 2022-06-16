@@ -1,6 +1,6 @@
 import axios from "axios";
 import { nanoid } from "nanoid";
-import { ICollection } from "../../contexts/CollectionsContext";
+import { ICollection } from "shared";
 
 export const getCollections = async () => {
   const res = await axios.get<ICollection[]>("/collections");

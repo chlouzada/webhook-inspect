@@ -2,6 +2,7 @@ import React, { ReactNode, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
 import { createCollection, getCollections } from "../queries/collections/collection";
 import { IWebhook } from "./WebhooksContext";
+import { ICollection } from "shared";
 
 export const CollectionsContext = React.createContext(
   {} as CollectionsContextType
@@ -19,15 +20,6 @@ type CollectionsContextType = {
   //   change: (key: string) => void;
   // };
 };
-
-export interface ICollection {
-  _id: string;
-  name: string;
-  publicCollection: boolean;
-  webhooksRef: IWebhook[];
-  createdAt: string;
-  updatedAt: string;
-}
 
 export function CollectionsContextProvider({
   children,

@@ -34,7 +34,7 @@ export interface IWebhookResponse {
 
 export function WebhooksContextProvider({ children }: { children: ReactNode }) {
   const { collection } = useCollections();
-  const [webhooks, setWebhooks] = useState<any[] | undefined>();
+  const [webhooks, setWebhooks] = useState<any>();
   const [render, setRender] = useState<
     { webhook: any | undefined; response: any | undefined } | undefined
   >();

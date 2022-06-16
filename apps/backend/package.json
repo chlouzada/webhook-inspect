@@ -12,6 +12,7 @@
   },
   "main": "dist/index.js",
   "dependencies": {
+    "shared": "*",
     "@types/cors": "^2.8.12",
     "config": "^3.3.7",
     "cors": "^2.8.5",

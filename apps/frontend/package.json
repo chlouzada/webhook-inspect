@@ -7,6 +7,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "shared": "*",
     "@mantine/core": "^4.2.4",
     "@mantine/hooks": "^4.2.4",
     "@mantine/modals": "^4.2.4",

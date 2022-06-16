@@ -1,4 +1,4 @@
-import CollectionsModel from "../models/collections.model";
+import { CollectionsModel } from "../models/collections.model";
 
 export default class CollectionsRepository {
   async create({

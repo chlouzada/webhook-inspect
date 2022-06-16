@@ -1,13 +1,14 @@
-import { Schema, model } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 import { nanoid } from "nanoid";
+import { ICollection as ICollectionShared } from "shared";
 
-interface ICollection {
-  name: string;
-  publicCollection: boolean;
-  redirectTo?: string;
+interface ICollection
+  extends Omit<ICollectionShared, "_id" | "userRef" | "webhooksRef"> {
   userRef: Schema.Types.ObjectId;
   webhooksRef: Schema.Types.ObjectId;
 }
+
+export type Collection = ICollection & Document;
 
 const collectionSchema = new Schema<ICollection>({
   name: { type: String, default: () => nanoid() },
@@ -19,6 +20,7 @@ const collectionSchema = new Schema<ICollection>({
   ],
 });
 
-const CollectionsModel = model<ICollection>("collections", collectionSchema);
-
-export default CollectionsModel;
+export const CollectionsModel = model<ICollection>(
+  "collections",
+  collectionSchema
+);

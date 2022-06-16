@@ -1,9 +1,9 @@
 import axios from "axios";
 import { nanoid } from "nanoid";
-import { ICollection } from "../contexts/CollectionsContext";
+import { ICollection } from "../../contexts/CollectionsContext";
 
 export const getCollections = async () => {
-  const res = await axios.get<ICollection[]>("/collection");
+  const res = await axios.get<ICollection[]>("/collections");
   return res.data;
 };
 
@@ -14,7 +14,7 @@ export const createCollection = async ({
   name?: string;
   publicCollection?: boolean;
 }) => {
-  const res = await axios.post("/collection", {
+  const res = await axios.post("/collections", {
     name: name || nanoid(),
     publicCollection: publicCollection || false,
   });

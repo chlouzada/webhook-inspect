@@ -4,7 +4,7 @@ import { useCollections } from "../../hooks/useCollections";
 import { Tabs, Text } from "@mantine/core";
 import { useWebhooks } from "../../hooks/useWebhooks";
 
-export default function Webhook() {
+export function Webhook() {
   const [activeTab, setActiveTab] = useState(0);
   const { render } = useWebhooks();
 

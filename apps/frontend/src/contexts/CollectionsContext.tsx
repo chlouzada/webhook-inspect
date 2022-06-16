@@ -1,13 +1,6 @@
-import { onValue, ref, set } from "@firebase/database";
-import axios from "axios";
-import moment from "moment";
-import { nanoid } from "nanoid";
 import React, { ReactNode, useEffect, useState } from "react";
 import { useMutation, useQuery } from "react-query";
-import { useLocation } from "react-router";
-import { useAuth } from "../hooks/useAuth";
-import { createCollection, getCollections } from "../queries/collection";
-import saveOnCookieLocalStorage from "../utils/saveOnCookieLocalStorage";
+import { createCollection, getCollections } from "../queries/collections/collection";
 import { IWebhook } from "./WebhooksContext";
 
 export const CollectionsContext = React.createContext(

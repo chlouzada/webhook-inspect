@@ -16,12 +16,12 @@ import "./main.css";
 
 const queryClient = new QueryClient();
 
-axios.defaults.baseURL = import.meta.env.VITE_HEROKU_URL;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 axios.interceptors.request.use(
   (config) => {
     if (!config.headers?.Authorization) {
-      const token = localStorage.getItem("accessToken");
+      const token = localStorage.getItem(import.meta.env.VITE_LS_PREFIX + "accessToken");
 
       if (token) {
         config.headers!.Authorization = `Bearer ${token}`;

@@ -1,7 +1,5 @@
 import React, { createContext, ReactNode, useEffect, useState } from "react";
-import axios from "axios";
-import { useQuery } from "react-query";
-import readFromCookieOrLocalStorage from "../utils/readFromCookieOrLocalStorage";
+import { auth } from "../queries/auth";
 
 export const AuthContext = createContext({} as AuthContextType);
 
@@ -17,35 +15,22 @@ type AuthContextType = {
 
 export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User>();
-  const accessToken = readFromCookieOrLocalStorage("accessToken");
-
-  const userQuery = useQuery(
-    "user",
-    async () => {
-      console.log("trying to fecth user");
-      const res = await axios.post<{ access_token: string }>("/app/auth/login");
-      return res.data;
-    },
-    { enabled: !accessToken }
-  );
+  const accessToken = localStorage.getItem(import.meta.env.VITE_LS_PREFIX + "accessToken");
 
   useEffect(() => {
-    if (userQuery.data) {
-      localStorage.setItem("accessToken", userQuery.data.access_token);
-      setUser({
-        // id: "userQuery.data.id",
-        // username: "userQuery.data.username",
-        accessToken: userQuery.data.access_token,
+    if (accessToken && accessToken !== 'undefined') return;
+    auth()
+      .then((data) => {
+        localStorage.setItem(import.meta.env.VITE_LS_PREFIX + "accessToken", data.accessToken);
+        setUser({
+          accessToken: data.accessToken,
+        });
+      })
+      .catch((e) => {
+        console.log(e)
+        setUser(undefined);
       });
-    }
-    if (!accessToken) return;
-
-    setUser({
-      // id: "userQuery.data.id",
-      // username: "userQuery.data.username",
-      accessToken,
-    });
-  }, [userQuery.isFetched]);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user }}>{children}</AuthContext.Provider>

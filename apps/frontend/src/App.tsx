@@ -1,11 +1,9 @@
-import { AppShell, Navbar, Text } from "@mantine/core";
+import { useState } from "react";
+import { AppShell } from "@mantine/core";
 import { useMantineTheme } from "@mantine/styles";
-import React, { useState } from "react";
-import { Routes, Route, HashRouter as Router } from "react-router-dom";
 import Header from "./components/Header";
 import Nagivation from "./components/Navigation";
-
-import Main from "./pages/Main/Main";
+import { Webhook } from "./components/Webhook";
 
 export default function App() {
   const theme = useMantineTheme();
@@ -26,7 +24,7 @@ export default function App() {
       navbar={<Nagivation opened={opened} setOpened={setOpened} />}
       header={<Header opened={opened} setOpened={setOpened} />}
     >
-      <Main />
+      <Webhook />
     </AppShell>
   );
 }

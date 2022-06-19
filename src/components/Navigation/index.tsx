@@ -1,14 +1,15 @@
+import { useCollections } from "@/contexts/CollectionsContext";
 import {
   Divider,
   Navbar,
   ScrollArea,
   Select,
   ActionIcon,
+  Button,
 } from "@mantine/core";
 import moment from "moment";
 import React from "react";
-import { useCollections } from "@/contexts/CollectionsContext";
-import { IWebhook, useWebhooks } from "@/contexts/WebhooksContext";
+import { IWebhook, useWebhooks } from "../../contexts/WebhooksContext";
 
 export default function Nagivation({
   opened,
@@ -18,8 +19,15 @@ export default function Nagivation({
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // const { webhooks, collection, render: { change } } = useWebhook();
-  const { collections, collection, change } = useCollections();
+  const { collections, collection, change, create } = useCollections();
   const { webhooks, changeRenderWebhook } = useWebhooks();
+
+  const handleCopy = () => {
+    if (!collection) return;
+    navigator.clipboard.writeText(
+      `${process.env.VITE_BACKEND_URL}/webhooks/${collection?.name}`
+    );
+  };
 
   return (
     <Navbar
@@ -28,8 +36,9 @@ export default function Nagivation({
       hidden={!opened}
       width={{ sm: 200, lg: 300 }}
     >
-      <Navbar.Section className="w-full">
+      <Navbar.Section className="w-full flex gap-2">
         <Select
+          className="w-full"
           placeholder={collection?.name}
           onChange={(collectionId) => {
             if (!collectionId) return;
@@ -42,9 +51,17 @@ export default function Nagivation({
             })) || []
           }
         />
+        <Button onClick={handleCopy}>Copy</Button>
       </Navbar.Section>
-      <Navbar.Section>
-        <Divider my="sm" />
+      <Navbar.Section className="pt-2">
+        <Button
+          className="w-full"
+          onClick={() => {
+            create({ name: "tesdt" });
+          }}
+        >
+          New
+        </Button>
       </Navbar.Section>
       <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
         {webhooks
@@ -90,54 +107,24 @@ function HttpMethod({
 }: {
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
 }) {
-  switch (method) {
-    case "GET":
-      return (
-        <span className="text-purple-500 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-    case "POST":
-      return (
-        <span className="text-green-500 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-    case "PUT":
-      return (
-        <span className="text-yellow-500 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-    case "DELETE":
-      return (
-        <span className="text-red-500 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-    case "PATCH":
-      return (
-        <span className="text-yellow-600 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-    case "HEAD":
-      return (
-        <span className="text-blue-500 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-    case "OPTIONS":
-      return (
-        <span className="text-indigo-500 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-    default:
-      return (
-        <span className="text-gray-500 rounded-md py-1 px-2 shadow">
-          {method}
-        </span>
-      );
-  }
+  const selectColor = (m: string) => {
+    if (m === "GET") return "text-purple-500";
+    if (m === "POST") return "text-green-500";
+    if (m === "PUT") return "text-yellow-500";
+    if (m === "DELETE") return "text-red-500";
+    if (m === "PATCH") return "text-yellow-600";
+    if (m === "HEAD") return "text-blue-500";
+    if (m === "OPTIONS") return "text-indigo-500";
+    return "text-gray-500";
+  };
+
+  return (
+    <span
+      className={`${selectColor(
+        method
+      )} rounded-md py-1 px-2 shadow`}
+    >
+      {method}
+    </span>
+  );
 }

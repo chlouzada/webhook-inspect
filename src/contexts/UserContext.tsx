@@ -3,8 +3,7 @@ import { useMutation, useQuery } from "react-query";
 import { IWebhook } from "./WebhooksContext";
 import { useContext } from "react";
 import { trpc } from "@/utils/trpc";
-import { useCookies } from "react-cookie";
-import { join } from "path";
+import { User } from "@prisma/client";
 
 export function useUser() {
   return useContext(UserContext);
@@ -13,47 +12,34 @@ export function useUser() {
 export const UserContext = React.createContext({} as UserContextType);
 
 type UserContextType = {
-  user: IUser | undefined;
+  user: User;
 };
 
-export interface IUser {
-  id: string;
-  createdAt: Date;
-}
-
 export function UserContextProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<IUser>();
+  const [user, setUser] = useState<User>();
 
   const newUserMutation = trpc.useMutation(["new-user"]);
 
   const newUser = async () => {
     const user = await newUserMutation.mutateAsync();
     localStorage.setItem("user", JSON.stringify(user));
-    setUser(user);
+    return user;
   };
 
   useEffect(() => {
-    console.log("useff");
     if (typeof window === "undefined") return;
     const ls = localStorage.getItem("user");
     const parsed = JSON.parse(ls || "{}");
-    if (!parsed.id) {
-      console.log("dentro");
-      newUser();
-      return;
-    }
-    console.log("set", parsed);
-
-    setUser(parsed as IUser);
+    setUser((parsed.id && (parsed as User)) || newUser());
   }, []);
 
   return (
     <UserContext.Provider
       value={{
-        user,
+        user: user!,
       }}
     >
-      {children}
+      {user && children}
     </UserContext.Provider>
   );
 }

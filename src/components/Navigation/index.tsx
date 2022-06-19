@@ -7,9 +7,10 @@ import {
   ActionIcon,
   Button,
 } from "@mantine/core";
+import { Webhook } from "@prisma/client";
 import moment from "moment";
 import React from "react";
-import { IWebhook, useWebhooks } from "../../contexts/WebhooksContext";
+import { useWebhooks } from "../../contexts/WebhooksContext";
 
 export default function Nagivation({
   opened,
@@ -19,8 +20,13 @@ export default function Nagivation({
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // const { webhooks, collection, render: { change } } = useWebhook();
-  const { collections, collection, change, create } = useCollections();
-  const { webhooks, changeRenderWebhook } = useWebhooks();
+  const {
+    collections,
+    collection,
+    change: changeCollection,
+    create,
+  } = useCollections();
+  const { webhooks, change: changeWebhook } = useWebhooks();
 
   const handleCopy = () => {
     if (!collection) return;
@@ -53,7 +59,7 @@ export default function Nagivation({
           placeholder={collection?.name}
           onChange={(collectionId) => {
             if (!collectionId) return;
-            change(collectionId);
+            changeCollection(collectionId);
           }}
           data={
             collections?.map((collection) => ({
@@ -75,9 +81,7 @@ export default function Nagivation({
             (a, b) =>
               new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
           )
-          ?.map((webhook) =>
-            WebhookNavigationItem({ webhook, changeRenderWebhook })
-          )}
+          ?.map((webhook) => WebhookNavigationItem({ webhook, changeWebhook }))}
       </Navbar.Section>
     </Navbar>
   );
@@ -85,21 +89,21 @@ export default function Nagivation({
 
 function WebhookNavigationItem({
   webhook,
-  changeRenderWebhook,
+  changeWebhook,
 }: {
-  webhook: IWebhook;
-  changeRenderWebhook: (id: string) => void;
+  webhook: Webhook;
+  changeWebhook: (id: string) => void;
 }) {
   const date = moment(webhook.createdAt);
   return (
     <ActionIcon
-      key={webhook._id}
+      key={webhook.id}
       onClick={() => {
-        changeRenderWebhook(webhook._id);
+        changeWebhook(webhook.id);
       }}
       className="flex w-full items-center mb-2 rounded-md hover:shadow-md px-4 py-6 hover:bg-gray-100 transition-all"
     >
-      <HttpMethod method={webhook.data.method} />
+      <HttpMethod method={(webhook.data as any).method as any} />
       <div className="flex flex-col items-end ml-auto">
         <p>{date.format("HH:mm:ss")}</p>
         <p>{date.format("YYYY-MM-DD")}</p>

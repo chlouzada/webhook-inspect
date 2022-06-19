@@ -13,15 +13,17 @@ const Home: NextPage = () => {
   return (
     <UserContextProvider>
       <CollectionsContextProvider>
-        <AppShell
-          navbarOffsetBreakpoint="sm"
-          // asideOffsetBreakpoint="sm"
-          fixed
-          navbar={<Nagivation opened={opened} setOpened={setOpened} />}
-          header={<Header opened={opened} setOpened={setOpened} />}
-        >
-          <Webhook />
-        </AppShell>
+        <WebhooksContextProvider>
+          <AppShell
+            navbarOffsetBreakpoint="sm"
+            // asideOffsetBreakpoint="sm"
+            fixed
+            navbar={<Nagivation opened={opened} setOpened={setOpened} />}
+            header={<Header opened={opened} setOpened={setOpened} />}
+          >
+            <Webhook />
+          </AppShell>
+        </WebhooksContextProvider>
       </CollectionsContextProvider>
     </UserContextProvider>
   );

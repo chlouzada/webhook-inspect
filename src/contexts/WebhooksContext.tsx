@@ -1,3 +1,5 @@
+import { trpc } from "@/utils/trpc";
+import { Webhook, WebhookResponse } from "@prisma/client";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
 import { useCollections } from "./CollectionsContext";
 
@@ -8,28 +10,14 @@ export function useWebhooks() {
 export const WebhooksContext = React.createContext({} as WebhooksContextType);
 
 type WebhooksContextType = {
-  webhooks?: IWebhook[];
+  webhooks: Webhook[];
   render?: {
-    webhook: IWebhook | undefined;
-    response: IWebhookResponse | undefined;
+    webhook: Webhook | undefined;
+    response: WebhookResponse | undefined;
     // change: (key: string) => void;
   };
-  changeRenderWebhook: (id: string) => void;
+  change: (webhookId: string) => void;
 };
-
-export interface IWebhook {
-  _id: string;
-  collectionRef: string;
-  createdAt: string;
-  updatedAt: string;
-  data: {
-    body?: object;
-    headers?: object;
-    method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
-    params?: object; // TODO: type
-  };
-  response?: IWebhookResponse;
-}
 
 export interface IWebhookResponse {
   body: object;
@@ -38,21 +26,25 @@ export interface IWebhookResponse {
 
 export function WebhooksContextProvider({ children }: { children: ReactNode }) {
   const { collection } = useCollections();
-  const [webhooks, setWebhooks] = useState<any[] | undefined>();
-  const [render, setRender] = useState<
-    { webhook: any | undefined; response: any | undefined } | undefined
-  >();
+  const [webhooks, setWebhooks] = useState<Webhook[]>([]);
+  const [render, setRender] = useState<{
+    webhook: Webhook | undefined;
+    response: WebhookResponse | undefined;
+  }>();
 
-  // useEffect(() => {
-  //   if (!collection) return;
-  //   setWebhooks(collection.);
-  //   setRender({ webhook: collection.webhooksRef[0], response: undefined });
-  // }, [collection]);
+  const query = trpc.useQuery(["webhooks", { collectionId: (collection?.id as string) }], {
+    enabled: !!collection?.id,
+  });
 
-  const changeRenderWebhook = (id: string) => {
-    const webhook = webhooks?.find((w) => w._id === id);
-    const response = webhook?.response;
-    setRender({ webhook, response });
+  useEffect(() => {
+    if (!query.data) return;
+    setWebhooks(query.data);
+    setRender({ webhook: query.data[0], response: undefined });
+  }, [query.data]);
+
+  const change = (webhookId: string) => {
+    const webhook = webhooks?.find((w) => w.id === webhookId);
+    setRender({ webhook, response: undefined });
   };
 
   return (
@@ -60,7 +52,7 @@ export function WebhooksContextProvider({ children }: { children: ReactNode }) {
       value={{
         webhooks,
         render,
-        changeRenderWebhook,
+        change,
       }}
     >
       {children}

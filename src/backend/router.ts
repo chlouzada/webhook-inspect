@@ -20,10 +20,27 @@ export const appRouter = trpc
 
       if (collections.length) return collections;
 
-      return await prisma.collection.create({
-        data: {
-          name: "default",
-          userId: input.userId,
+      return [
+        await prisma.collection.create({
+          data: {
+            name: "default",
+            userId: input.userId,
+          },
+        }),
+      ];
+    },
+  })
+  .query("webhooks", {
+    input: z.object({
+      collectionId: z.string().length(24),
+    }),
+    async resolve({ input }) {
+      return await prisma.webhook.findMany({
+        where: {
+          collectionId: input.collectionId,
+        },
+        orderBy: {
+          createdAt: "desc",
         },
       });
     },
@@ -37,7 +54,6 @@ export const appRouter = trpc
           userId: undefined,
         },
       });
-      console.log(collection)
 
       if (!collection) {
         return await prisma.collection.create({

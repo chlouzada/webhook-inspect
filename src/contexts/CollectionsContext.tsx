@@ -33,7 +33,7 @@ export function CollectionsContextProvider({
 }: {
   children: ReactNode;
 }) {
-  const [collections, setCollections] = useState<Collection[]>();
+  const [collections, setCollections] = useState<Collection[]>([]);
   const [collection, setCollection] = useState<Collection>();
   const { user } = useUser();
   const modals = useModals();

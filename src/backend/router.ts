@@ -13,6 +13,9 @@ export const appRouter = trpc
         where: {
           userId: input.userId,
         },
+        orderBy: {
+          createdAt: "desc"
+        }
       });
     },
   })

@@ -28,7 +28,14 @@ export const appRouter = trpc
   })
   .mutation("new-user", {
     async resolve() {
-      return await prisma.user.create({ data: {} })
+      const user =  await prisma.user.create({ data: {} })
+      await prisma.collection.create({
+        data:{
+          name: "Default",
+          userId: user.id,
+        }
+      })
+      return user
     },
   });
 // export type definition of API

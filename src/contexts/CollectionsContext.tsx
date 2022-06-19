@@ -1,12 +1,8 @@
-import moment from "moment";
-import { nanoid } from "nanoid";
 import React, { ReactNode, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { IWebhook } from "./WebhooksContext";
 import { useContext } from "react";
-import { createCollection, getCollections } from "@/queries/collection";
 import { trpc } from "@/utils/trpc";
 import { useUser } from "./UserContext";
+import { Collection } from "@prisma/client";
 
 export function useCollections() {
   return useContext(CollectionsContext);
@@ -17,9 +13,10 @@ export const CollectionsContext = React.createContext(
 );
 
 type CollectionsContextType = {
-  collections: ICollection[] | undefined;
-  collection: ICollection | undefined;
-  changeCollection: (collectionId: string) => void;
+  collections: Collection[] | undefined;
+  collection: Collection | undefined;
+  change: (collectionId: string) => void;
+  create: (data: {name: string}) => void;
   // collection: string;
   // webhooks: any[] | undefined;
   // render: {
@@ -29,38 +26,42 @@ type CollectionsContextType = {
   // };
 };
 
-export interface ICollection {
-  _id: string;
-  name: string;
-  publicCollection: boolean;
-  webhooksRef: IWebhook[];
-  createdAt: string;
-  updatedAt: string;
-}
-
 export function CollectionsContextProvider({
   children,
 }: {
   children: ReactNode;
 }) {
-  const { user } = useUser()
-  const [collections, setCollections] = useState<ICollection[]>();
-  const [collection, setCollection] = useState<ICollection>();
+  const [collections, setCollections] = useState<Collection[]>();
+  const [collection, setCollection] = useState<Collection>();
 
-  // const createCollectionMutation = useMutation(createCollection);
-  const collectionsQuery = trpc.useQuery(['collections', { userId: user.id }]);
-  const newCollectionMutation = trpc.useMutation(['new-collection']);
+  const { user } = useUser();
 
-  const changeCollection = (collectionId: string) => {
-    setCollection(collections?.find((c) => c._id === collectionId));
+  const query = trpc.useQuery(["collections", { userId: user.id }]);
+  const createMutation = trpc.useMutation(["new-collection"]);
+
+  const change = (collectionId: string) => {
+    setCollection(collections?.find((c) => c.id === collectionId));
   };
+
+  const create = async (data: { name: string }) => {
+    const created = await createMutation.mutateAsync({ ...data, userId: user.id });
+    setCollection(collections?.find((c) => c.id === created.id));
+  };
+
+  useEffect(() => {
+    const data = query.data;
+    if (!data) return;
+    setCollections(data);
+    setCollection(data[0]);
+  }, [query.data]);
 
   return (
     <CollectionsContext.Provider
       value={{
         collections,
         collection,
-        changeCollection,
+        change,
+        create,
         // webhooks,
         // render: {
         // webhook: webhookToRender,

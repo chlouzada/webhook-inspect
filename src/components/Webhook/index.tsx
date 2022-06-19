@@ -18,13 +18,14 @@ export default function Webhook() {
       className="overflow-auto"
     >
       <Tabs.Tab label="Webhook">
-        <JsonArea json={render?.webhook?.data.body} />
+        <JsonArea json={(render?.webhook?.data as any).body} />
       </Tabs.Tab>
       <Tabs.Tab
         label="Response"
-        disabled={render?.webhook?.response ? false : true}
+        // TODO: disabled={render?.webhook?.response ? false : true}
+        disabled={true}
       >
-        <JsonArea json={render?.webhook?.response?.body} />
+        {/* TODO: <JsonArea json={render?.webhook?.response?.body} /> */}
       </Tabs.Tab>
     </Tabs>
   );

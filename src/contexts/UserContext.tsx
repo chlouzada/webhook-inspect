@@ -1,6 +1,4 @@
 import React, { ReactNode, useEffect, useState } from "react";
-import { useMutation, useQuery } from "react-query";
-import { IWebhook } from "./WebhooksContext";
 import { useContext } from "react";
 import { trpc } from "@/utils/trpc";
 import { User } from "@prisma/client";

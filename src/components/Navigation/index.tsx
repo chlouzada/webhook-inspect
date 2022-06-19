@@ -18,7 +18,7 @@ export default function Nagivation({
   setOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   // const { webhooks, collection, render: { change } } = useWebhook();
-  const { collections, collection, changeCollection } = useCollections();
+  const { collections, collection, change } = useCollections();
   const { webhooks, changeRenderWebhook } = useWebhooks();
 
   return (
@@ -33,12 +33,12 @@ export default function Nagivation({
           placeholder={collection?.name}
           onChange={(collectionId) => {
             if (!collectionId) return;
-            changeCollection(collectionId);
+            change(collectionId);
           }}
           data={
             collections?.map((collection) => ({
               label: collection.name,
-              value: collection._id,
+              value: collection.id,
             })) || []
           }
         />

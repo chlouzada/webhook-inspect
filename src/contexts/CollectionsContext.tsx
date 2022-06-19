@@ -48,13 +48,8 @@ export function CollectionsContextProvider({
   const [collection, setCollection] = useState<ICollection>();
 
   // const createCollectionMutation = useMutation(createCollection);
-  const collectionsQuery = trpc.useQuery(['collections', { userId: '62a50b46d4ed2c93380044b2' }]);
+  const collectionsQuery = trpc.useQuery(['collections', { userId: user.id }]);
   const newCollectionMutation = trpc.useMutation(['new-collection']);
-
-  useEffect(() => {
-    if (!collectionsQuery.data)
-      newCollectionMutation.mutate({ name: 'New Collection', userId: '62a50b46d4ed2c93380044b2' })
-  }, [collectionsQuery.data]);
 
   const changeCollection = (collectionId: string) => {
     setCollection(collections?.find((c) => c._id === collectionId));

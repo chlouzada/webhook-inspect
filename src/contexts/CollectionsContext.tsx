@@ -39,7 +39,12 @@ export function CollectionsContextProvider({
   const modals = useModals();
 
   const query = trpc.useQuery(["collections", { userId: user.id }]);
-  const createMutation = trpc.useMutation(["new-collection"]);
+  const createMutation = trpc.useMutation(["new-collection"], {
+    onSuccess(data) {
+      setCollections([data,...(collections || [])]);
+      setCollection(data)
+    },
+  });
 
   const change = (collectionId: string) => {
     setCollection(collections?.find((c) => c.id === collectionId));

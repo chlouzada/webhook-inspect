@@ -22,7 +22,9 @@ export default async function handler(
     },
   });
 
-  res.status(200).json(webhook);
+  if (!collection.redirectTo) return res.status(200).json(webhook);
+
+  res.redirect(collection.redirectTo);
 }
 
 const findOrCreate = async (name: string) => {

@@ -43,11 +43,11 @@ export function WebhooksContextProvider({ children }: { children: ReactNode }) {
     { webhook: any | undefined; response: any | undefined } | undefined
   >();
 
-  useEffect(() => {
-    if (!collection) return;
-    setWebhooks(collection.webhooksRef);
-    setRender({ webhook: collection.webhooksRef[0], response: undefined });
-  }, [collection]);
+  // useEffect(() => {
+  //   if (!collection) return;
+  //   setWebhooks(collection.);
+  //   setRender({ webhook: collection.webhooksRef[0], response: undefined });
+  // }, [collection]);
 
   const changeRenderWebhook = (id: string) => {
     const webhook = webhooks?.find((w) => w._id === id);

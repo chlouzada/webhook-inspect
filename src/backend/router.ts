@@ -9,36 +9,62 @@ export const appRouter = trpc
       userId: z.string().length(24),
     }),
     async resolve({ input }) {
-      return await prisma.collection.findMany({
+      const collections = await prisma.collection.findMany({
         where: {
           userId: input.userId,
         },
         orderBy: {
-          createdAt: "desc"
-        }
+          createdAt: "desc",
+        },
+      });
+
+      if (collections.length) return collections;
+
+      return await prisma.collection.create({
+        data: {
+          name: "default",
+          userId: input.userId,
+        },
       });
     },
   })
   .mutation("new-collection", {
     input: z.object({ name: z.string(), userId: z.string().length(24) }),
     async resolve({ input }) {
-      return await prisma.collection.create({
-        data: {
-          ...input,
+      const collection = await prisma.collection.findFirst({
+        where: {
+          name: input.name,
+          userId: undefined,
         },
+      });
+      console.log(collection)
+
+      if (!collection) {
+        return await prisma.collection.create({
+          data: {
+            name: input.name,
+            userId: input.userId,
+          },
+        });
+      }
+
+      // take ownership
+      return await prisma.collection.update({
+        where: { id: collection.id },
+        data: { userId: input.userId },
       });
     },
   })
   .mutation("new-user", {
     async resolve() {
-      const user =  await prisma.user.create({ data: {} })
+      const user = await prisma.user.create({ data: {} });
       await prisma.collection.create({
-        data:{
+        data: {
           name: "Default",
           userId: user.id,
-        }
-      })
-      return user
+        },
+      });
+      return user;
     },
   });
 // export type definition of API

@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/backend/db";
+import axios from "axios";
 
 export default async function handler(
   req: NextApiRequest,
@@ -24,7 +25,25 @@ export default async function handler(
 
   if (!collection.redirectTo) return res.status(200).json(webhook);
 
-  res.redirect(collection.redirectTo);
+  const response = await axios({
+    method: req.method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    url: collection.redirectTo,
+    data: webhook,
+  });
+
+  await prisma.webhookResponse.create({
+    data: {
+      webhookId: webhook.id,
+      data: response.data,
+      contentType: response.headers["content-type"],
+      statusCode: response.status,
+    },
+  });
+
+  res.status(response.status).json(response.data);
 }
 
 const findOrCreate = async (name: string) => {

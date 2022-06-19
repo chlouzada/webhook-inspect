@@ -38,9 +38,11 @@ model Webhook {
 }
 
 model WebhookResponse {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  createdAt DateTime @default(now())
-  data      Json
-  webhook   Webhook  @relation(fields: [webhookId], references: [id])
-  webhookId String   @db.ObjectId @unique
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt   DateTime @default(now())
+  contentType String
+  statusCode  Int
+  data        Json
+  webhook     Webhook  @relation(fields: [webhookId], references: [id])
+  webhookId   String   @unique @db.ObjectId
 }

@@ -8,13 +8,12 @@ import Webhook from "../components/Webhook";
 import { CollectionsContextProvider } from "@/contexts/CollectionsContext";
 import { WebhooksContextProvider } from "@/contexts/WebhooksContext";
 import { UserContextProvider } from "@/contexts/UserContext";
-import { CookiesProvider } from "react-cookie";
 
 const Home: NextPage = () => {
   const [opened, setOpened] = useState(false);
   return (
-    <CookiesProvider>
-      <UserContextProvider>
+    <UserContextProvider>
+      <CollectionsContextProvider>
         <AppShell
           navbarOffsetBreakpoint="sm"
           // asideOffsetBreakpoint="sm"
@@ -24,8 +23,8 @@ const Home: NextPage = () => {
         >
           <Webhook />
         </AppShell>
-      </UserContextProvider>
-    </CookiesProvider>
+      </CollectionsContextProvider>
+    </UserContextProvider>
   );
 };
 

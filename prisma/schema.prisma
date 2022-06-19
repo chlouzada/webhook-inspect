@@ -30,10 +30,10 @@ model Collection {
 model Webhook {
   id                String           @id @default(auto()) @map("_id") @db.ObjectId
   createdAt         DateTime         @default(now())
-  headers           Json
-  body              Json
-  query             Json
-  method            String?
+  headers           String
+  body              String
+  query             String
+  method            String
   collection        Collection?      @relation(fields: [collectionId], references: [id])
   collectionId      String?          @db.ObjectId
   webhookResponse   WebhookResponse?
@@ -45,7 +45,7 @@ model WebhookResponse {
   createdAt   DateTime @default(now())
   contentType String
   statusCode  Int
-  data        Json
+  data        String  
   webhook     Webhook  @relation(fields: [webhookId], references: [id])
   webhookId   String   @unique @db.ObjectId
 }

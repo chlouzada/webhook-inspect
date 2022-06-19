@@ -14,10 +14,10 @@ export default async function handler(
   const webhook = await prisma.webhook.create({
     data: {
       collectionId: collection.id,
-      headers,
-      body,
-      query,
-      method,
+      headers: JSON.stringify(headers),
+      body: JSON.stringify(body),
+      query: JSON.stringify(query),
+      method: method!,
     },
   });
 

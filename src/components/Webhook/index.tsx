@@ -18,7 +18,7 @@ export default function Webhook() {
       className="overflow-auto"
     >
       <Tabs.Tab label="Webhook">
-        <JsonArea json={render?.webhook?.data.body} />
+        <JsonArea json={JSON.parse(render?.webhook?.body || "{}")} />
       </Tabs.Tab>
       <Tabs.Tab
         label="Response"

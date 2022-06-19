@@ -103,7 +103,19 @@ function WebhookNavigationItem({
       }}
       className="flex w-full items-center mb-2 rounded-md hover:shadow-md px-4 py-6 hover:bg-gray-100 transition-all"
     >
-      <HttpMethod method={(webhook.data as any).method as any} />
+      <HttpMethod
+        method={
+          webhook.method as
+            | "GET"
+            | "POST"
+            | "PUT"
+            | "DELETE"
+            | "PATCH"
+            | "HEAD"
+            | "OPTIONS"
+            | null
+        }
+      />
       <div className="flex flex-col items-end ml-auto">
         <p>{date.format("HH:mm:ss")}</p>
         <p>{date.format("YYYY-MM-DD")}</p>
@@ -115,9 +127,17 @@ function WebhookNavigationItem({
 function HttpMethod({
   method,
 }: {
-  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" | "HEAD" | "OPTIONS";
+  method:
+    | "GET"
+    | "POST"
+    | "PUT"
+    | "DELETE"
+    | "PATCH"
+    | "HEAD"
+    | "OPTIONS"
+    | null;
 }) {
-  const selectColor = (m: string) => {
+  const selectColor = (m: string | null) => {
     if (m === "GET") return "text-purple-500";
     if (m === "POST") return "text-green-500";
     if (m === "PUT") return "text-yellow-500";

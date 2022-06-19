@@ -1,6 +1,4 @@
-import { nanoid } from "nanoid";
-import React, { useEffect, useRef, useState } from "react";
-import moment from "moment";
+import React, { useEffect, useState } from "react";
 
 export default function JsonArea({ json }: { json?: object }) {
   const [webhookArray, setWebhookArray] = useState<string[]>([]);
@@ -10,11 +8,15 @@ export default function JsonArea({ json }: { json?: object }) {
   const [parsed, setParsed] = useState("");
 
   useEffect(() => {
-    if (!json) return;
+    if (!json) {
+      setWebhookArray([]);
+      setParsed("");
+      return;
+    }
     const stringifyData = JSON.stringify(json, undefined, 4);
     const lines = stringifyData?.split("\n");
     setWebhookArray(lines);
-    setParsed(stringifyData || "");
+    setParsed(stringifyData);
   }, [json]);
 
   function handler(btn: EventTarget & HTMLButtonElement) {

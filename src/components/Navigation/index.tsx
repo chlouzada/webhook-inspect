@@ -36,6 +36,17 @@ export default function Nagivation({
       hidden={!opened}
       width={{ sm: 200, lg: 300 }}
     >
+      <Navbar.Section className="pb-3">
+        <Button
+          variant="outline"
+          className="w-full"
+          onClick={() => {
+            create({ name: "tesdt" });
+          }}
+        >
+          New
+        </Button>
+      </Navbar.Section>
       <Navbar.Section className="w-full flex gap-2">
         <Select
           className="w-full"
@@ -51,17 +62,12 @@ export default function Nagivation({
             })) || []
           }
         />
-        <Button onClick={handleCopy}>Copy</Button>
-      </Navbar.Section>
-      <Navbar.Section className="pt-2">
-        <Button
-          className="w-full"
-          onClick={() => {
-            create({ name: "tesdt" });
-          }}
-        >
-          New
+        <Button variant="outline" onClick={handleCopy}>
+          Copy
         </Button>
+      </Navbar.Section>
+      <Navbar.Section>
+        <Divider my="sm" />
       </Navbar.Section>
       <Navbar.Section grow component={ScrollArea} mx="-xs" px="xs">
         {webhooks
@@ -119,11 +125,7 @@ function HttpMethod({
   };
 
   return (
-    <span
-      className={`${selectColor(
-        method
-      )} rounded-md py-1 px-2 shadow`}
-    >
+    <span className={`${selectColor(method)} rounded-md py-1 px-2 shadow`}>
       {method}
     </span>
   );

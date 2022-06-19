@@ -1,4 +1,3 @@
-import { trpc } from "@/utils/trpc";
 import { AppShell } from "@mantine/core";
 import type { NextPage } from "next";
 import { useState } from "react";

@@ -1,6 +1,7 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { MantineProvider } from "@mantine/core";
+import { ModalsProvider } from "@mantine/modals";
 import { withTRPC } from "@trpc/next";
 import { AppRouter } from "@/backend/router";
 
@@ -13,7 +14,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         colorScheme: "light",
       }}
     >
-      <Component {...pageProps} />
+      <ModalsProvider>
+        <Component {...pageProps} />
+      </ModalsProvider>
     </MantineProvider>
   );
 }
@@ -39,4 +42,3 @@ export default withTRPC<AppRouter>({
    */
   ssr: false,
 })(MyApp);
-

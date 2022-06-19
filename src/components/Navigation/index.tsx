@@ -25,7 +25,7 @@ export default function Nagivation({
   const handleCopy = () => {
     if (!collection) return;
     navigator.clipboard.writeText(
-      `${process.env.VITE_BACKEND_URL}/webhooks/${collection?.name}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/api/webhook/${collection.name}`
     );
   };
 

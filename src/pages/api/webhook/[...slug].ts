@@ -2,6 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import { prisma } from "@/backend/db";
 import axios from "axios";
+import Pusher from "pusher";
+import { emitWebhook } from "@/backend/pusher";
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,6 +22,8 @@ export default async function handler(
       method: method!,
     },
   });
+
+  emitWebhook({ collectionId: collection.name, data: webhook });
 
   if (!collection.redirectTo) return res.status(200).json(webhook);
 

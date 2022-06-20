@@ -38,8 +38,8 @@ export function CollectionsContextProvider({
   const { user } = useUser();
   const modals = useModals();
 
-  const query = trpc.useQuery(["collections", { userId: user.id }]);
-  const createMutation = trpc.useMutation(["new-collection"], {
+  const query = trpc.useQuery(["collections.all", { userId: user.id }]);
+  const createMutation = trpc.useMutation(["collections.new"], {
     onSuccess(data) {
       setCollections([data,...(collections || [])]);
       setCollection(data)
@@ -51,7 +51,7 @@ export function CollectionsContextProvider({
   };
 
   const create = () => {
-    const stringLocalStorage = "new-collection";
+    const stringLocalStorage = "new-collection-data";
 
     const handleConfirm = async () => {
       const data = localStorage.getItem(stringLocalStorage);

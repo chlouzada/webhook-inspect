@@ -16,7 +16,7 @@ type UserContextType = {
 export function UserContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User>();
 
-  const newUserMutation = trpc.useMutation(["new-user"]);
+  const newUserMutation = trpc.useMutation(["users.new"]);
 
   const newUser = async () => {
     const user = await newUserMutation.mutateAsync();

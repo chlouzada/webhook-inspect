@@ -32,7 +32,7 @@ export function WebhooksContextProvider({ children }: { children: ReactNode }) {
     response: WebhookResponse | undefined;
   }>();
 
-  const query = trpc.useQuery(["webhooks", { collectionId: (collection?.id as string) }], {
+  const query = trpc.useQuery(["webhooks.all", { collectionId: (collection?.id as string) }], {
     enabled: !!collection?.id,
   });
 

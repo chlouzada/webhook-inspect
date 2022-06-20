@@ -4,6 +4,9 @@ import { MantineProvider } from "@mantine/core";
 import { ModalsProvider } from "@mantine/modals";
 import { withTRPC } from "@trpc/next";
 import { AppRouter } from "@/backend/router";
+import { CollectionsContextProvider } from "@/contexts/CollectionsContext";
+import { WebhooksContextProvider } from "@/contexts/WebhooksContext";
+import { UserContextProvider } from "@/contexts/UserContext";
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -15,7 +18,14 @@ function MyApp({ Component, pageProps }: AppProps) {
       }}
     >
       <ModalsProvider>
-        <Component {...pageProps} />
+        <UserContextProvider>
+          <CollectionsContextProvider>
+            <WebhooksContextProvider>
+              <Component {...pageProps} />
+            </WebhooksContextProvider>
+          </CollectionsContextProvider>
+        </UserContextProvider>
+
       </ModalsProvider>
     </MantineProvider>
   );

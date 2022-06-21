@@ -3,8 +3,8 @@ import Pusher from "pusher";
 
 const pusher = new Pusher({
   appId: "1426321",
-  key: "1cd4614f4c0a77332cfe",
-  secret: "3b7aec8b64478250b1ce",
+  key: process.env.PUSHER_KEY!,
+  secret: process.env.PUSHER_SECRET!,
   cluster: "us2",
   useTLS: true,
 });

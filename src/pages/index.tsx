@@ -11,7 +11,6 @@ import usePusher from "@/hooks/usePusher";
 
 const Home: NextPage = () => {
   const { collection } = useCollections();
-  const { lenght, pop } = usePusher(collection)
 
   const [opened, setOpened] = useState(false);
   return (

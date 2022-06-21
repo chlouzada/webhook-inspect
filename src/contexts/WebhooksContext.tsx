@@ -1,3 +1,4 @@
+import usePusher from "@/hooks/usePusher";
 import { trpc } from "@/utils/trpc";
 import { Webhook, WebhookResponse } from "@prisma/client";
 import React, { ReactNode, useContext, useEffect, useState } from "react";
@@ -32,9 +33,18 @@ export function WebhooksContextProvider({ children }: { children: ReactNode }) {
     response: WebhookResponse | undefined;
   }>();
 
+  const { remove, received } = usePusher(collection)
+
+
   const query = trpc.useQuery(["webhooks.all", { collectionId: (collection?.id as string) }], {
     enabled: !!collection?.id,
   });
+
+  useEffect(() => {
+    if (!received) return;
+    setWebhooks([...webhooks, received]);
+    remove();
+  }, [received])
 
   useEffect(() => {
     if (!query.data) return;

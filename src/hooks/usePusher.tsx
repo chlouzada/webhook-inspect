@@ -3,10 +3,9 @@ import Pusher from 'pusher-js'
 import { Collection, Webhook } from '@prisma/client';
 
 export default function usePusher(collection?: Collection) {
-  const [receivedWebhook, setReceivedWebhook] = useState<Webhook[]>()
+  const [receivedWebhook, setReceivedWebhook] = useState<Webhook>()
 
-  const pop = () => receivedWebhook?.pop()
-  const lenght = () => receivedWebhook?.length || 0
+  const remove = () => setReceivedWebhook(undefined)
 
   const pusher = new Pusher('1cd4614f4c0a77332cfe', {
     cluster: 'us2'
@@ -17,8 +16,8 @@ export default function usePusher(collection?: Collection) {
 
     // FIXME: make subscription work with collection ObjectId
     const channel = pusher.subscribe(collection.name);
-    channel.bind("new-webhook", function (data: Webhook) {
-      setReceivedWebhook([...(receivedWebhook || []), data])
+    channel.bind("new-webhook", (data: Webhook) => {
+      setReceivedWebhook(data)
       console.log(data);
     });
 
@@ -28,5 +27,5 @@ export default function usePusher(collection?: Collection) {
     };
   }, [collection]);
 
-  return { pop, lenght }
+  return { remove, received: receivedWebhook }
 }

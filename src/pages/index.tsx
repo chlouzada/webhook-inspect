@@ -7,28 +7,11 @@ import Webhook from "../components/Webhook";
 
 import Pusher from 'pusher-js';
 import { useCollections } from "@/contexts/CollectionsContext";
+import usePusher from "@/hooks/usePusher";
 
 const Home: NextPage = () => {
-
   const { collection } = useCollections();
-
-  const pusher = new Pusher('1cd4614f4c0a77332cfe', {
-    cluster: 'us2'
-  });
-
-  useEffect(() => {
-    if (!collection) return
-
-    const channel = pusher.subscribe('collection');
-    channel.bind('webhook', function (data: any) {
-      console.log('comming from collection', data);
-    });
-
-    return () => {
-      channel.unbind('webhook');
-      channel.unsubscribe();
-    };
-  }, [collection]);
+  const { lenght, pop } = usePusher(collection)
 
   const [opened, setOpened] = useState(false);
   return (

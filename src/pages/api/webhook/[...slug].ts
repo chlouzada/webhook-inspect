@@ -23,7 +23,7 @@ export default async function handler(
     },
   });
 
-  emitWebhook({ collectionId: collection.name, data: webhook });
+  await emitWebhook({collection, webhook });
 
   if (!collection.redirectTo) return res.status(200).json(webhook);
 

@@ -1,4 +1,4 @@
-import { Webhook } from "@prisma/client";
+import { Collection, Webhook } from "@prisma/client";
 import Pusher from "pusher";
 
 const pusher = new Pusher({
@@ -10,14 +10,13 @@ const pusher = new Pusher({
 });
 
 const emitWebhook = async ({
-  collectionId,
-  data,
+  collection,
+  webhook,
 }: {
-  collectionId: string;
-  data: Webhook;
+  collection: Collection;
+  webhook: Webhook;
 }) => {
-  pusher.trigger(String(collectionId), "webhook", data);
-  pusher.trigger(`collection`, "webhook", data);
+  console.log(await pusher.trigger(collection.name, "new-webhook", webhook));
 };
 
 export { emitWebhook };
